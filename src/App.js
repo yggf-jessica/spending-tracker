@@ -19,7 +19,7 @@ function App() {
   return (
     <Router>
       <div style={{ padding: 20 }}>
-        <h1>Spending Tracker App ✅</h1>
+        <h1>Spending Tracker App 👄</h1>
         <nav>
           <Link to="/" style={{ marginRight: 10 }}>Dashboard</Link>
           <Link to="/journal">Journal</Link>

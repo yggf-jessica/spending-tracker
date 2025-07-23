@@ -1,49 +1,74 @@
-// import React, { useState, useEffect } from "react";
-// import { LineChartComponent } from "./LineChartComponent";
-// import { PieChartComponent } from "./PieChartComponent";
-// import { groupByTimePeriod, calculateTotals } from "../utils/LocalStorageHelpers";
+import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
+import { LineChartComponent } from "./LineChartComponent";
+import { PieChartComponent } from "./PieChartComponent";
 
-// function Dashboard() {
-//   const [view, setView] = useState("monthly");
-//   const [data, setData] = useState([]);
+dayjs.extend(isoWeek);
 
-//   useEffect(() => {
-//     const entries = JSON.parse(localStorage.getItem("spendingEntries")) || [];
-//     setData(entries);
-//   }, []);
+const Dashboard = () => {
+  const [view, setView] = useState("daily");
+  const [groupedData, setGroupedData] = useState({});
+  const [totalAllTime, setTotalAllTime] = useState(0);
+  const [totalSelectedPeriod, setTotalSelectedPeriod] = useState(0);
 
-//   const grouped = groupByTimePeriod(data, view);
-//   const totals = calculateTotals(data);
+  useEffect(() => {
+    const rawData = JSON.parse(localStorage.getItem("spendingEntries")) || [];
 
-//   return (
-//     <div>
-//       <h2 className="text-xl font-semibold mb-2">Analytics Dashboard</h2>
+    const totalAll = rawData.reduce((sum, e) => sum + Number(e.amount), 0);
+    setTotalAllTime(totalAll);
 
-//       <div className="space-x-2 mb-2">
-//         <button onClick={() => setView("daily")}>Daily</button>
-//         <button onClick={() => setView("weekly")}>Weekly</button>
-//         <button onClick={() => setView("monthly")}>Monthly</button>
-//       </div>
+    const selectedMonth = dayjs().format("YYYY-MM");
+    const totalMonth = rawData.reduce((sum, e) => {
+      return e.date.startsWith(selectedMonth) ? sum + Number(e.amount) : sum;
+    }, 0);
+    setTotalSelectedPeriod(totalMonth);
 
-//       <p>Total Spending (All Time): ${totals.allTime}</p>
-//       <p>Total Spending (This {view}): ${totals[view]}</p>
+    const grouped = groupByTimePeriod(rawData, view);
+    setGroupedData(grouped);
+  }, [view]);
 
-//       <div className="my-4">
-//         <LineChartComponent data={grouped} view={view} />
-//         <PieChartComponent data={grouped} />
-//       </div>
-//     </div>
-//   );
-// }
+  return (
+    <div className="dashboard" style={{ padding: "1rem" }}>
+      <h1>Analytics Dashboard</h1>
 
+      <div style={{ marginBottom: "1rem" }}>
+        <button onClick={() => setView("daily")}>Daily</button>
+        <button onClick={() => setView("weekly")}>Weekly</button>
+        <button onClick={() => setView("monthly")}>Monthly</button>
+      </div>
 
+      <div>
+        <p><strong>Total Spending (All Time):</strong> ${totalAllTime.toFixed(2)}</p>
+        <p><strong>Total Spending (This Month):</strong> ${totalSelectedPeriod.toFixed(2)}</p>
+      </div>
 
-// export default Dashboard;
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
+        <div style={{ flex: 1, minWidth: "300px", maxWidth: "600px", height: "400px" }}>
+          <LineChartComponent groupedData={groupedData} view={view} />
+        </div>
+        <div style={{ flex: 1, minWidth: "300px", maxWidth: "600px", height: "400px" }}>
+          <PieChartComponent groupedData={groupedData} />
+        </div>
+      </div>
+    </div>
+  );
+};
 
-import React from "react";
+const groupByTimePeriod = (entries, period) => {
+  const result = {};
+  entries.forEach(e => {
+    const key = period === "daily"
+      ? dayjs(e.date).format("YYYY-MM-DD")
+      : period === "weekly"
+      ? `${dayjs(e.date).isoWeek()}-${dayjs(e.date).year()}`
+      : dayjs(e.date).format("YYYY-MM");
 
-function Dashboard() {
-  return <div><h2>Dashboard Page ✅</h2></div>;
-}
+    if (!result[key]) result[key] = {};
+    if (!result[key][e.category]) result[key][e.category] = 0;
+    result[key][e.category] += Number(e.amount);
+  });
+  return result;
+};
 
 export default Dashboard;

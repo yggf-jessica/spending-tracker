@@ -1,9 +1,6 @@
-// src/utils/localStorageHelpers.js
-import dayjs from "dayjs";                   // ✅ Core Day.js library
-import isoWeek from "dayjs/plugin/isoWeek";  // ✅ Week grouping plugin
-
-dayjs.extend(isoWeek);                       // ✅ Activate plugin
-
+import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek";
+dayjs.extend(isoWeek);
 
 export const groupByTimePeriod = (entries, period) => {
   const result = {};
@@ -11,7 +8,7 @@ export const groupByTimePeriod = (entries, period) => {
     const key = period === "daily"
       ? e.date
       : period === "weekly"
-      ? dayjs(e.date).isoWeek()
+      ? `Week ${dayjs(e.date).isoWeek()}`
       : dayjs(e.date).format("YYYY-MM");
     result[key] = (result[key] || 0) + e.amount;
   });
@@ -20,13 +17,17 @@ export const groupByTimePeriod = (entries, period) => {
 
 export const calculateTotals = (entries) => {
   const allTime = entries.reduce((sum, e) => sum + e.amount, 0);
-  const now = dayjs();
-  const monthly = entries.filter(e => dayjs(e.date).format("YYYY-MM") === now.format("YYYY-MM"))
-    .reduce((sum, e) => sum + e.amount, 0);
-  const weekly = entries.filter(e => dayjs(e.date).isoWeek() === now.isoWeek())
-    .reduce((sum, e) => sum + e.amount, 0);
-  const daily = entries.filter(e => e.date === now.format("YYYY-MM-DD"))
-    .reduce((sum, e) => sum + e.amount, 0);
+  return { allTime };
+};
 
-  return { allTime, monthly, weekly, daily };
+export const filterByTimePeriod = (entries, period) => {
+  const now = dayjs();
+  if (period === "daily") {
+    return entries.filter(e => e.date === now.format("YYYY-MM-DD"));
+  } else if (period === "weekly") {
+    return entries.filter(e => dayjs(e.date).isoWeek() === now.isoWeek());
+  } else if (period === "monthly") {
+    return entries.filter(e => dayjs(e.date).format("YYYY-MM") === now.format("YYYY-MM"));
+  }
+  return entries;
 };
