@@ -3,26 +3,26 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-export const PieChartComponent = ({ data = {}, total = 0 }) => {
+const PieChartComponent = ({ data = {}, total = 0 }) => {
   const labels = Object.keys(data)
   const values = Object.values(data)
 
   const colors = [
-    "#3b82f6",
-    "#ef4444",
-    "#10b981",
-    "#f59e0b",
-    "#8b5cf6",
-    "#ec4899",
-    "#06b6d4",
-    "#84cc16",
-    "#f97316",
-    "#6366f1",
-    "#14b8a6",
-    "#f43f5e",
-    "#8b5cf6",
-    "#06b6d4",
-    "#84cc16",
+    "#722F37", // Deep burgundy
+    "#8B4513", // Saddle brown
+    "#A0522D", // Sienna
+    "#CD853F", // Peru
+    "#D2B48C", // Tan
+    "#DEB887", // Burlywood
+    "#F4A460", // Sandy brown
+    "#DAA520", // Goldenrod
+    "#B8860B", // Dark goldenrod
+    "#9ACD32", // Yellow green
+    "#8FBC8F", // Dark sea green
+    "#20B2AA", // Light sea green
+    "#4682B4", // Steel blue
+    "#6495ED", // Cornflower blue
+    "#9370DB", // Medium purple
   ]
 
   const chartData = {
@@ -48,6 +48,11 @@ export const PieChartComponent = ({ data = {}, total = 0 }) => {
         labels: {
           usePointStyle: true,
           padding: 15,
+          color: "#722F37",
+          font: {
+            size: 11,
+            weight: "500",
+          },
           generateLabels: (chart) => {
             const data = chart.data
             if (data.labels.length && data.datasets.length) {
@@ -55,7 +60,7 @@ export const PieChartComponent = ({ data = {}, total = 0 }) => {
                 const value = data.datasets[0].data[i]
                 const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0
                 return {
-                  text: `${label}: $${value.toFixed(2)} (${percentage}%)`,
+                  text: `${label}: ฿${value.toFixed(2)} (${percentage}%)`,
                   fillStyle: data.datasets[0].backgroundColor[i],
                   strokeStyle: data.datasets[0].borderColor,
                   lineWidth: data.datasets[0].borderWidth,
@@ -69,16 +74,16 @@ export const PieChartComponent = ({ data = {}, total = 0 }) => {
         },
       },
       tooltip: {
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        backgroundColor: "rgba(114, 47, 55, 0.9)",
         titleColor: "#ffffff",
         bodyColor: "#ffffff",
-        borderColor: "#3b82f6",
+        borderColor: "#722F37",
         borderWidth: 1,
         callbacks: {
           label: (context) => {
             const value = context.parsed
             const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0
-            return `${context.label}: $${value.toFixed(2)} (${percentage}%)`
+            return `${context.label}: ฿${value.toFixed(2)} (${percentage}%)`
           },
         },
       },
@@ -87,10 +92,18 @@ export const PieChartComponent = ({ data = {}, total = 0 }) => {
 
   if (labels.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500">
-        <div className="text-center">
-          <p className="text-lg mb-2">No data available</p>
-          <p className="text-sm">Add some spending entries to see your breakdown</p>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+          color: "#8B4513",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <p style={{ fontSize: "1.2rem", marginBottom: "10px", color: "#722F37" }}>No data available</p>
+          <p style={{ fontSize: "1rem", color: "#8B4513" }}>Add some spending entries to see your breakdown</p>
         </div>
       </div>
     )
@@ -102,3 +115,5 @@ export const PieChartComponent = ({ data = {}, total = 0 }) => {
     </div>
   )
 }
+
+export default PieChartComponent

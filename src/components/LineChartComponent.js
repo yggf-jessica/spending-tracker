@@ -12,7 +12,7 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, Filler)
 
-export const LineChartComponent = ({ data = {}, view }) => {
+const LineChartComponent = ({ data = {}, view }) => {
   const labels = Object.keys(data || {}).sort()
   const values = labels.map((label) => data[label] || 0)
 
@@ -39,15 +39,17 @@ export const LineChartComponent = ({ data = {}, view }) => {
       {
         label: `Spending (${view})`,
         data: values,
-        borderColor: "#3b82f6",
-        backgroundColor: "rgba(59, 130, 246, 0.1)",
+        borderColor: "#722F37",
+        backgroundColor: "rgba(114, 47, 55, 0.1)",
         fill: true,
         tension: 0.4,
-        pointBackgroundColor: "#3b82f6",
+        pointBackgroundColor: "#722F37",
         pointBorderColor: "#ffffff",
         pointBorderWidth: 2,
         pointRadius: 4,
         pointHoverRadius: 6,
+        pointHoverBackgroundColor: "#8B4513",
+        pointHoverBorderColor: "#ffffff",
       },
     ],
   }
@@ -61,18 +63,23 @@ export const LineChartComponent = ({ data = {}, view }) => {
         labels: {
           usePointStyle: true,
           padding: 20,
+          color: "#722F37",
+          font: {
+            size: 12,
+            weight: "600",
+          },
         },
       },
       tooltip: {
         mode: "index",
         intersect: false,
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        backgroundColor: "rgba(114, 47, 55, 0.9)",
         titleColor: "#ffffff",
         bodyColor: "#ffffff",
-        borderColor: "#3b82f6",
+        borderColor: "#722F37",
         borderWidth: 1,
         callbacks: {
-          label: (context) => `${context.dataset.label}: $${context.parsed.y.toFixed(2)}`,
+          label: (context) => `${context.dataset.label}: ฿${context.parsed.y.toFixed(2)}`,
         },
       },
     },
@@ -82,23 +89,29 @@ export const LineChartComponent = ({ data = {}, view }) => {
           display: true,
           text: "Time Period",
           font: { size: 12, weight: "bold" },
+          color: "#722F37",
         },
         grid: {
           display: false,
+        },
+        ticks: {
+          color: "#8B4513",
         },
       },
       y: {
         title: {
           display: true,
-          text: "Amount ($)",
+          text: "Amount (฿)",
           font: { size: 12, weight: "bold" },
+          color: "#722F37",
         },
         beginAtZero: true,
         grid: {
-          color: "rgba(0, 0, 0, 0.1)",
+          color: "rgba(114, 47, 55, 0.1)",
         },
         ticks: {
-          callback: (value) => "$" + value.toFixed(0),
+          callback: (value) => "฿" + value.toFixed(0),
+          color: "#8B4513",
         },
       },
     },
@@ -110,10 +123,18 @@ export const LineChartComponent = ({ data = {}, view }) => {
 
   if (labels.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500">
-        <div className="text-center">
-          <p className="text-lg mb-2">No data available</p>
-          <p className="text-sm">Add some spending entries to see your chart</p>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+          color: "#8B4513",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <p style={{ fontSize: "1.2rem", marginBottom: "10px", color: "#722F37" }}>No data available</p>
+          <p style={{ fontSize: "1rem", color: "#8B4513" }}>Add some spending entries to see your chart</p>
         </div>
       </div>
     )
@@ -125,3 +146,5 @@ export const LineChartComponent = ({ data = {}, view }) => {
     </div>
   )
 }
+
+export default LineChartComponent

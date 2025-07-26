@@ -1,13 +1,16 @@
 export const getSpendingEntries = () => {
+  if (typeof window === "undefined") return []
   try {
-    return JSON.parse(localStorage.getItem("spendingEntries") || "[]")
+    const entries = localStorage.getItem("spendingEntries")
+    return entries ? JSON.parse(entries) : []
   } catch (error) {
     console.error("Error loading spending entries:", error)
     return []
   }
 }
 
-export const saveSpendingEntries = (entries) => {
+export const saveSpendingEntries = (entries: any[]) => {
+  if (typeof window === "undefined") return false
   try {
     localStorage.setItem("spendingEntries", JSON.stringify(entries))
     return true
@@ -18,15 +21,18 @@ export const saveSpendingEntries = (entries) => {
 }
 
 export const getCustomCategories = () => {
+  if (typeof window === "undefined") return []
   try {
-    return JSON.parse(localStorage.getItem("customCategories") || "[]")
+    const categories = localStorage.getItem("customCategories")
+    return categories ? JSON.parse(categories) : []
   } catch (error) {
     console.error("Error loading custom categories:", error)
     return []
   }
 }
 
-export const saveCustomCategories = (categories) => {
+export const saveCustomCategories = (categories: string[]) => {
+  if (typeof window === "undefined") return false
   try {
     localStorage.setItem("customCategories", JSON.stringify(categories))
     return true
@@ -37,5 +43,5 @@ export const saveCustomCategories = (categories) => {
 }
 
 export const generateId = () => {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 9)
+  return Date.now().toString(36) + Math.random().toString(36).substr(2)
 }
