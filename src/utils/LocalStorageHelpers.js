@@ -1,33 +1,41 @@
-import dayjs from "dayjs";
-import isoWeek from "dayjs/plugin/isoWeek";
-dayjs.extend(isoWeek);
-
-export const groupByTimePeriod = (entries, period) => {
-  const result = {};
-  entries.forEach(e => {
-    const key = period === "daily"
-      ? e.date
-      : period === "weekly"
-      ? `Week ${dayjs(e.date).isoWeek()}`
-      : dayjs(e.date).format("YYYY-MM");
-    result[key] = (result[key] || 0) + e.amount;
-  });
-  return result;
-};
-
-export const calculateTotals = (entries) => {
-  const allTime = entries.reduce((sum, e) => sum + e.amount, 0);
-  return { allTime };
-};
-
-export const filterByTimePeriod = (entries, period) => {
-  const now = dayjs();
-  if (period === "daily") {
-    return entries.filter(e => e.date === now.format("YYYY-MM-DD"));
-  } else if (period === "weekly") {
-    return entries.filter(e => dayjs(e.date).isoWeek() === now.isoWeek());
-  } else if (period === "monthly") {
-    return entries.filter(e => dayjs(e.date).format("YYYY-MM") === now.format("YYYY-MM"));
+export const getSpendingEntries = () => {
+  try {
+    return JSON.parse(localStorage.getItem("spendingEntries") || "[]")
+  } catch (error) {
+    console.error("Error loading spending entries:", error)
+    return []
   }
-  return entries;
-};
+}
+
+export const saveSpendingEntries = (entries) => {
+  try {
+    localStorage.setItem("spendingEntries", JSON.stringify(entries))
+    return true
+  } catch (error) {
+    console.error("Error saving spending entries:", error)
+    return false
+  }
+}
+
+export const getCustomCategories = () => {
+  try {
+    return JSON.parse(localStorage.getItem("customCategories") || "[]")
+  } catch (error) {
+    console.error("Error loading custom categories:", error)
+    return []
+  }
+}
+
+export const saveCustomCategories = (categories) => {
+  try {
+    localStorage.setItem("customCategories", JSON.stringify(categories))
+    return true
+  } catch (error) {
+    console.error("Error saving custom categories:", error)
+    return false
+  }
+}
+
+export const generateId = () => {
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9)
+}

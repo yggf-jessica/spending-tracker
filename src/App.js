@@ -1,37 +1,48 @@
-// import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom"
+import Dashboard from "./components/Dashboard"
+import Journal from "./components/Journal"
+import "./App.css"
 
-// function App() {
-//   return (
-//     <div style={{ padding: 20 }}>
-//       <h1>Hello! This is a test. ✅</h1>
-//     </div>
-//   );
-// }
+function Navigation() {
+  const location = useLocation()
 
-// export default App;
+  const isActive = (path) => {
+    return location.pathname === path
+  }
 
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Dashboard from "./components/Dashboard";
-import Journal from "./components/Journal";
+  return (
+    <nav className="navbar">
+      <div className="navbar-content">
+        <Link to="/" className="navbar-brand">
+          💰 Spending Tracker
+        </Link>
+        <div className="navbar-nav">
+          <Link to="/" className={`nav-link ${isActive("/") ? "active" : ""}`}>
+            Dashboard
+          </Link>
+          <Link to="/journal" className={`nav-link ${isActive("/journal") ? "active" : ""}`}>
+            Journal
+          </Link>
+        </div>
+      </div>
+    </nav>
+  )
+}
 
 function App() {
   return (
     <Router>
-      <div style={{ padding: 20 }}>
-        <h1>Spending Tracker App 👄</h1>
-        <nav>
-          <Link to="/" style={{ marginRight: 10 }}>Dashboard</Link>
-          <Link to="/journal">Journal</Link>
-        </nav>
-
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/journal" element={<Journal />} />
-        </Routes>
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div style={{ padding: "32px 0" }}>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/journal" element={<Journal />} />
+          </Routes>
+        </div>
       </div>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App
