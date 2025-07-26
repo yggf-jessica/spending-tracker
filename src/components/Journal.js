@@ -65,7 +65,7 @@ function Journal() {
       setDate(new Date().toISOString().split("T")[0])
       setCategory("")
       setAmount("")
-      alert("Entry saved successfully! ✅")
+      alert("Entry saved successfully!")
     } else {
       alert("Error saving entry. Please try again.")
     }
@@ -103,7 +103,7 @@ function Journal() {
     if (saveCustomCategories(updatedCustomCategories)) {
       setCategories([...categories, trimmedCategory])
       setCustomCategory("")
-      alert("Category added successfully! ✅")
+      alert("Category added successfully!")
     } else {
       alert("Error adding category. Please try again.")
     }
@@ -143,7 +143,7 @@ function Journal() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Amount ($)</label>
+              <label className="form-label">Amount (฿)</label>
               <input
                 type="number"
                 step="0.01"
