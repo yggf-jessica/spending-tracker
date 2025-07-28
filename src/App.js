@@ -1,18 +1,20 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import Navigation from "./components/Navigation"
-import Journal from "./components/Journal"
-import Dashboard from "./components/Dashboard"
-import "./App.css"
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Navigation from "./components/Navigation";
+import Journal from "./components/Journal";
+import Dashboard from "./components/Dashboard";
+import "./App.css";
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Navigation />
+
         <Routes>
-          <Route path="/" element={<Navigate to="/journal" replace />} />
-          <Route path="/journal" element={<Journal />} />
+          {/* ✅ Redirect root to dashboard */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/journal" element={<Journal />} />
         </Routes>
 
         {/* Footer */}
@@ -33,7 +35,7 @@ function App() {
         </footer>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
