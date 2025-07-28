@@ -8,8 +8,8 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const navigation = [
-    { name: "Journal", href: "/journal" },
     { name: "Dashboard", href: "/dashboard" },
+    { name: "Journal", href: "/journal" },
   ]
 
   const isActive = (href) => location.pathname === href
@@ -37,7 +37,7 @@ const Navigation = () => {
       >
         {/* Logo/Title */}
         <Link
-          to="/journal"
+          to="/dashboard"
           style={{
             textDecoration: "none",
             color: "white",
