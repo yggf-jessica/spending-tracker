@@ -27,7 +27,7 @@ function App() {
         >
           <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
             <p style={{ margin: "0", fontSize: "1rem", opacity: "0.9" }}>
-              © 2024 Spending Tracker - Track your expenses, achieve your goals
+              © 2025 Spending Tracker - Track your expenses, achieve your goals
             </p>
           </div>
         </footer>
