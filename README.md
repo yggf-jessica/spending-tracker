@@ -1,11 +1,11 @@
-##  Group Members by Harry, Hyan
+##  Group Members
 - **Hein Htet Moe Tun**
 - **Phyu Mon Thant**
 - **S Harry Lynn Oo**
 
 ---
 
-##  App Screenshots by Jessica
+##  App Screenshots
 
 <p align="center">
   <img width="800" alt="Screenshot 1" src="https://github.com/user-attachments/assets/a6a0d341-5c20-4543-87a8-b68d5180c417" />
